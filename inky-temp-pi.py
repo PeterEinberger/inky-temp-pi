@@ -121,7 +121,8 @@ masks = {}
 
 weather = get_weather()
 
-read_dht11()
+temperature, humidity = read_dht11()
+send_probeData(temperature, humidity)
 
 # This maps the weather summary from Dark Sky
 # to the appropriate weather icons
