@@ -29,7 +29,7 @@ parser.add_argument('--colour', '-c', type=str, required=True, choices=["red", "
 args = parser.parse_args()
 
 dirPath = os.path.dirname(__file__)
-serviceUrl = "http://192.168.1.174:3000"
+serviceUrl = "http://192.168.1.190:3000"
 
 # Settings for TempHumid Sensor
 
@@ -76,10 +76,36 @@ def create_mask(source, mask=(inky_display.WHITE, inky_display.BLACK, inky_displ
 
     return mask_image
 
+# reads sensor multiple times and tries to generate an accurate reading
+# returns [temperature, humidity]
 def read_dht11():
-    humidity, temperature = Adafruit_DHT.read_retry(dht, dhtPin)
-    print(humidity)
-    print(temperature)
+    humidity = 0
+    humidityArr = []
+    temperature = 0
+    temperatureArr = []
+    while len(humidityArr) < 5:
+        humidityVal, temperatureVal = Adafruit_DHT.read_retry(dht, dhtPin)
+        if humidityVal is not None and temperatureVal is not None:
+            humidityArr.append(humidityVal)
+            temperatureArr.append(temperatureVal)
+        print("hVal: " + humidityVal)
+        print("tVal: " + temperatureVal)
+
+    print(humidityArr)
+    print(len(humidityArr))
+    print(temperatureArr)
+    print(len(temperatureArr))
+
+    for h in humidityArr:
+        humidity += h
+
+    humidity = humidity / len(humidityArr)
+    temperature = temperature / len(temperatureArr)
+    
+    print("h: " + humidity)
+    print("t: " + temperature)
+
+    return(temperature, humidity)
 
 # Dictionaries to store our icons and icon masks in
 icons = {}
