@@ -3,6 +3,7 @@
 
 import os
 import glob
+import json
 import argparse
 import Adafruit_DHT
 from datetime import datetime
@@ -30,6 +31,7 @@ args = parser.parse_args()
 
 dirPath = os.path.dirname(__file__)
 serviceUrl = "http://192.168.1.190:3000"
+senderId = "Wohnzimmer"
 
 # Settings for TempHumid Sensor
 
@@ -88,24 +90,30 @@ def read_dht11():
         if humidityVal is not None and temperatureVal is not None:
             humidityArr.append(humidityVal)
             temperatureArr.append(temperatureVal)
-        print("hVal: " + humidityVal)
-        print("tVal: " + temperatureVal)
-
-    print(humidityArr)
-    print(len(humidityArr))
-    print(temperatureArr)
-    print(len(temperatureArr))
 
     for h in humidityArr:
         humidity += h
 
+    for t in temperatureArr:
+        temperature += t
+
+
     humidity = humidity / len(humidityArr)
     temperature = temperature / len(temperatureArr)
     
-    print("h: " + humidity)
-    print("t: " + temperature)
+    print("h: " + str(humidity))
+    print("t: " + str(temperature))
 
     return(temperature, humidity)
+
+def send_probeData(temperature, humidity):
+    payload = {
+        "senderId": senderId,
+        "humidity": humidity,
+        "temp": temperature,
+    }
+    res = requests.post(serviceUrl + "/probe", json=payload)
+    print(res)
 
 # Dictionaries to store our icons and icon masks in
 icons = {}
