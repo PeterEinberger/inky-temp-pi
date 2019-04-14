@@ -17,7 +17,7 @@ setup(
     license = "MIT",
     keywords = "rpi zero, inky phat, dht11",
     url = "",
-    packages=['inky', 'PIL', 'font_fredoka_one', 'Adafruit_DHT'],
+    install_requires=['inkyphat', 'Pillow', 'font_fredoka_one', 'Adafruit_DHT'],
     long_description=read('README'),
     classifiers=[
         "Development Status :: 3 - Alpha",

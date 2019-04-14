@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import glob
-from datetime import datetime
 import argparse
+import Adafruit_DHT
+from datetime import datetime
 from inky import InkyPHAT
 from PIL import Image, ImageDraw, ImageFont
 from font_fredoka_one import FredokaOne
@@ -20,7 +21,6 @@ Displays weather information for a specific sensor.
 
 """)
 
-
 # Command line arguments to set display colour
 
 parser = argparse.ArgumentParser()
@@ -28,7 +28,12 @@ parser.add_argument('--colour', '-c', type=str, required=True, choices=["red", "
 args = parser.parse_args()
 
 dirPath = os.path.dirname(__file__)
-serviceUrl = http://192.168.1.174:3000
+serviceUrl = "http://192.168.1.174:3000"
+
+# Settings for TempHumid Sensor
+
+dht = Adafruit_DHT.DHT11
+dhtPin = 14
 
 # Set up the display
 
@@ -70,11 +75,18 @@ def create_mask(source, mask=(inky_display.WHITE, inky_display.BLACK, inky_displ
 
     return mask_image
 
+def read_dht11():
+    humidity, temperature = Adafruit_DHT.read_retry(dht, dhtPin)
+    print(humidity)
+    print(temperature)
+
 # Dictionaries to store our icons and icon masks in
 icons = {}
 masks = {}
 
 weather = get_weather()
+
+read_dht11()
 
 # This maps the weather summary from Dark Sky
 # to the appropriate weather icons
