@@ -154,11 +154,11 @@ else:
     print("Warning, no weather information found!")
 
 # Create a new canvas to draw on
-img = Image.open(dirPath + "resources/backdrop.png")
+img = Image.open(dirPath + "/resources/backdrop.png")
 draw = ImageDraw.Draw(img)
 
 # Load our icon files and generate masks
-for icon in glob.glob(dirPath + "resources/icon-*.png"):
+for icon in glob.glob(dirPath + "/resources/icon-*.png"):
     icon_name = icon.split("icon-")[1].replace(".png", "")
     icon_image = Image.open(icon)
     icons[icon_name] = icon_image
